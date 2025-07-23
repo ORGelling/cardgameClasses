@@ -1,5 +1,3 @@
-/*
-
 //Trying to wrap all of this in classes now. WIP.
 
 #include <iostream>
@@ -112,7 +110,7 @@ public:
 	}
 
 	Hand(int size) : handSize(size) {
-		hand = drawHand(Card* deck, int& deckSize, handSize); // Initialize hand with the specified size
+		hand = drawHand(handSize); // Initialize hand with the specified size
 	}
 
 	~Hand() {
@@ -144,5 +142,3 @@ public:
 	}
 
 };
-
-*/
