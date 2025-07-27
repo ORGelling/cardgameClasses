@@ -31,7 +31,6 @@ public:
 		const char* suits[] = { "C", "D", "H", "S" };
 		int points[] = { 2,3,4,5,6,7,8,9,10,10,10,10,10 }; // Points for blackjack
 
-		int totalCards = 52 * numDecks;
 		Card* newDeck = new Card[totalCards];
 
 		int index = 0; // Index to fill the new deck
@@ -102,6 +101,16 @@ public:
 		}
 		cout << endl;
 	}
+
+	void showDeckSplit() const {
+		for (int i = 0; i < deckSize; i++) {
+			cout << deck[i].rank << deck[i].suit << " ";
+			if (i < deckSize - 1 && deck[i].suit != deck[i + 1].suit) {
+				cout << endl; // Print a new line if the suit changes
+			}
+		}
+		cout << endl;
+	}
 	
 	void showSize() const {
 		cout << "Deck size: " << deckSize << endl; // Show the size of the deck
@@ -150,10 +159,35 @@ public:
 		delete[] hand; // Clean up memory
 	}
 
+	void drawCard(Deck& deck, int draws = 1) {
+		Card* newHand = new Card[handSize + draws]; // Initialize hand with the specified size
+		for (int i = 0; i < handSize; i++) {
+			newHand[i] = hand[i]; // Copy existing cards to the new hand
+		}
+		// Draw additional cards from the deck
+		for (int i = handSize; i < handSize + draws; i++) {
+			newHand[i] = deck.drawCard(); // Draw a card from the deck
+		}
+		delete[] hand; // Clean up memory for the old hand
+		hand = newHand; // Update the hand to the new hand with the drawn cards
+		handSize += draws; // Increase the size of the hand
+		sortHand(); // Initialize hand with the specified size
+	}
+
 	
 	void show() const {
 		for (int i = 0; i < handSize; i++) {
 			cout << hand[i].rank << hand[i].suit << " ";
+		}
+		cout << endl;
+	}
+
+	void showSplit() const {
+		for (int i = 0; i < handSize; i++) {
+			cout << hand[i].rank << hand[i].suit << " ";
+			if (i < handSize - 1 && hand[i].suit != hand[i + 1].suit) {
+				cout << endl; // Print a new line if the suit changes
+			}
 		}
 		cout << endl;
 	}
@@ -178,19 +212,15 @@ public:
 
 int main() {
 	Deck deck(2); // Create a deck with 1 standard deck of cards
-	//deck.showDeck();
-	//int size = deck.getDeckSize(); // Get the size of the deck
-	//cout << "Deck size: " << size << endl;
-	//Card* currentDeck = deck.getDeck(); // Get the current deck of cards
-	//for (int i = 0; i < size; i++) {
-	//		cout << currentDeck[i].rank << currentDeck[i].suit << " ";
-	//	}
-	//	cout << endl;
+	deck.showDeckSplit(); // Show the deck split by suit
 	deck.showSize(); // Show the size of the deck
 	Hand playerHand(deck, 12); // Draw a hand of 2 cards
-	//playerHand.show(); // Show the player's hand
-	playerHand.show(); // Sort the player's hand
+	playerHand.showSize(); // Show the size of the player's hand
+	deck.showSize(); // Show the size of the deck
+	playerHand.drawCard(deck, 8); // Draw another card
 	playerHand.showSize(); // Show the size of the player's hand
 	//deck.showDeck(); // Show the remaining deck
 	deck.showSize(); // Show the size of the deck
+	//deck.showDeckSplit(); // Show the deck split by suit
+	//playerHand.showSplit(); // Show the player's hand split by suit
 }
