@@ -69,6 +69,7 @@ public:
 
 	Deck(int numDecks = 1) : numDecks(numDecks), totalCards(52 * numDecks), deckSize(52 * numDecks) {
 		deck = createDeck(numDecks);
+		//sortDeck(); // Sort the deck after creation. Not necessary, but looks nice in debugging.
 	}
 
 	~Deck() {
@@ -102,7 +103,8 @@ public:
 		cout << endl;
 	}
 
-	void showDeckSplit() const {
+	void showDeckSplit() {
+		sortDeck(); // Sort the deck before showing it
 		for (int i = 0; i < deckSize; i++) {
 			cout << deck[i].rank << deck[i].suit << " ";
 			if (i < deckSize - 1 && deck[i].suit != deck[i + 1].suit) {
@@ -114,6 +116,13 @@ public:
 	
 	void showSize() const {
 		cout << "Deck size: " << deckSize << endl; // Show the size of the deck
+	}
+
+	void sortDeck() {
+	//easy sort lmao
+	sort(deck, deck + deckSize, [](const Card& a, const Card& b) {
+		return a.sort < b.sort;
+		});
 	}
 
 };
@@ -223,8 +232,7 @@ public:
 
 	BlackJack(int numDecks = 1, int handSize = 2) :		deck(numDecks), playerHand(deck, handSize), dealerHand(deck, handSize) {
 		// Initialize the game with a deck and player hand
-
-	};
+	}
 
 	void hit() {
 		playerHand.drawCard(deck); // Draw a card for the player
@@ -252,7 +260,7 @@ public:
 		// Implement the dealer's turn logic
 	}
 
-	void quit() {
+	int quit() {
 		cout << "Quitting the game." << endl;
 		return 0; // Exit the game
 	}
@@ -261,15 +269,10 @@ public:
 
 int main() {
 	Deck deck(2); // Create a deck with 1 standard deck of cards
+
+	Hand playerHand(deck, 8); // Draw a hand of 2 cards
+	
+	playerHand.showSplit(); // Show the player's hand split by suit
+	cout << endl;
 	deck.showDeckSplit(); // Show the deck split by suit
-	deck.showSize(); // Show the size of the deck
-	Hand playerHand(deck, 12); // Draw a hand of 2 cards
-	playerHand.showSize(); // Show the size of the player's hand
-	deck.showSize(); // Show the size of the deck
-	playerHand.drawCard(deck, 8); // Draw another card
-	playerHand.showSize(); // Show the size of the player's hand
-	//deck.showDeck(); // Show the remaining deck
-	deck.showSize(); // Show the size of the deck
-	//deck.showDeckSplit(); // Show the deck split by suit
-	//playerHand.showSplit(); // Show the player's hand split by suit
 }
