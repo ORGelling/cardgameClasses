@@ -1,7 +1,7 @@
 # Card Game Project
 
 ## Overview
-This project is a simple card game implemented in C++. It utilizes object-oriented programming principles to manage the game's components, including decks of cards and player hands.
+This project is a simple card game implemented in C++. It utilizes object-oriented programming principles to manage the game's components, including decks of cards and player hands. It is not done but it is coming along nicely. Most of the work is for now being done in the main "class-structure.cpp" file as this is where I'm setting up the classes and testing everything. After everything works I will split it up in separate files with headers and then use them all in Qt as the wiring behind a GUI.
 
 ## Project Structure
 The project is organized into the following files and directories:
@@ -9,14 +9,16 @@ The project is organized into the following files and directories:
 ```
 cardgame
 ├── src
-│   ├── main.cpp       # Entry point of the application
-│   ├── deck.h         # Header file for the Deck class
-│   ├── deck.cpp       # Implementation of the Deck class
-│   ├── hand.h         # Header file for the Hand class
-│   ├── hand.cpp       # Implementation of the Hand class
-│   └── card.h         # Definition of the Card structure
-├── CMakeLists.txt     # CMake configuration file
-└── README.md          # Project documentation
+│   ├── main.cpp        # Entry point of the application
+│   ├── deck.h          # Header file for the Deck class
+│   ├── deck.cpp        # Implementation of the Deck class
+│   ├── hand.h          # Header file for the Hand class
+│   ├── hand.cpp        # Implementation of the Hand class
+│   └── card.h          # Definition of the Card structure
+├── CMakeLists.txt      # CMake configuration file
+├── README.md           # Project documentation
+├── class-structure     # The executable
+└── class-structure.cpp # The current main working file
 ```
 
 ## Setup Instructions
