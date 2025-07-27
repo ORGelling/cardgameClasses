@@ -88,11 +88,7 @@ public:
 		deckSize = size; // Set the size of the deck
 	}
 
-	Card** getDeckPointer() {
-		return &deck; // Return the pointer to the deck
-	}
-
-	int& getDeckSize() {
+	int getDeckSize() {
 		return deckSize; // Return the size of the deck
 	}
 
@@ -105,6 +101,10 @@ public:
 			cout << deck[i].rank << deck[i].suit << " ";
 		}
 		cout << endl;
+	}
+	
+	void showSize() const {
+		cout << "Deck size: " << deckSize << endl; // Show the size of the deck
 	}
 
 };
@@ -158,6 +158,10 @@ public:
 		cout << endl;
 	}
 
+	void showSize() const {
+		cout << "Hand size: " << handSize << endl; // Show the size of the deck
+	}
+
 	int getScore() const {
 		int score = 0;
 		for (int i = 0; i < handSize; i++) {
@@ -182,7 +186,11 @@ int main() {
 	//		cout << currentDeck[i].rank << currentDeck[i].suit << " ";
 	//	}
 	//	cout << endl;
-	Hand playerHand(deck, 8); // Draw a hand of 2 cards
+	deck.showSize(); // Show the size of the deck
+	Hand playerHand(deck, 12); // Draw a hand of 2 cards
 	//playerHand.show(); // Show the player's hand
 	playerHand.show(); // Sort the player's hand
+	playerHand.showSize(); // Show the size of the player's hand
+	//deck.showDeck(); // Show the remaining deck
+	deck.showSize(); // Show the size of the deck
 }
