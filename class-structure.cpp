@@ -207,6 +207,55 @@ public:
 	bool isBusted() const {
 		return getScore() > 21; // Check if the hand is busted
 	}
+};
+
+///////////////////////////////////////////////////////////////////////////////////
+
+class BlackJack {
+
+private:
+
+	Deck deck;
+	Hand playerHand;
+	Hand dealerHand;
+
+public:
+
+	BlackJack(int numDecks = 1, int handSize = 2) :		deck(numDecks), playerHand(deck, handSize), dealerHand(deck, handSize) {
+		// Initialize the game with a deck and player hand
+
+	};
+
+	void hit() {
+		playerHand.drawCard(deck); // Draw a card for the player
+		if (playerHand.isBusted()) {
+			cout << "Player busted with score: " << playerHand.getScore() << endl;
+		} else {
+			cout << "Player's new score: " << playerHand.getScore() << endl;
+		}
+	}
+
+	void stand() {
+		cout << "Player stands with score: " << playerHand.getScore() << endl;
+		dealerTurn(); // Proceed to dealer's turn
+	}
+	
+	void playRound() {
+		// Implement the logic for playing a round of blackjack
+	}
+
+	void playerTurn() {
+		// Implement the player's turn logic
+	}
+
+	void dealerTurn() {
+		// Implement the dealer's turn logic
+	}
+
+	void quit() {
+		cout << "Quitting the game." << endl;
+		return 0; // Exit the game
+	}
 
 };
 
