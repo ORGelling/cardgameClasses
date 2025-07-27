@@ -1,6 +1,4 @@
-/*
-
-//Trying to wrap all of this in classes now. WIP.
+// Trying to wrap all of this in classes now. WIP.
 
 #include <iostream>
 #include <cstdlib>
@@ -53,6 +51,23 @@ public:
 		return newDeck;
 	};
 
+	Card drawCard() {
+		if (deckSize == 0) throw std::runtime_error("Deck is empty!");
+		int cardPick = rand() % deckSize; // Randomly pick a card from the deck
+		Card pickedCard = deck[cardPick]; // Get the picked card
+
+		Card* newDeck = new Card[deckSize - 1]; // Create a new deck without the picked card
+		for (int j = 0, k = 0; j < deckSize; j++) {
+			if (j != cardPick) { // Skip the picked card
+				newDeck[k++] = (deck)[j]; // Copy the remaining cards to the new deck
+			}
+		}
+		delete[] deck; // Clean up memory for the old deck
+		deck = newDeck; // Update the deck to the new deck without the picked card
+		deckSize--; // Decrease deck size after picking a card
+		return pickedCard;
+	}
+
 	Deck(int numDecks = 1) : numDecks(numDecks), totalCards(52 * numDecks), deckSize(52 * numDecks) {
 		deck = createDeck(numDecks);
 	}
@@ -65,8 +80,31 @@ public:
 		return deck;
 	}
 
-	int getTotalCards() const {
+	void setDeck(Card* newDeck) {
+		deck = newDeck; // Set the deck to a new deck
+	}
+
+	void setDeckSize(int size) {
+		deckSize = size; // Set the size of the deck
+	}
+
+	Card** getDeckPointer() {
+		return &deck; // Return the pointer to the deck
+	}
+
+	int& getDeckSize() {
+		return deckSize; // Return the size of the deck
+	}
+
+	int getTotalCards() {
 		return totalCards;
+	}
+
+	void showDeck() const {
+		for (int i = 0; i < deckSize; i++) {
+			cout << deck[i].rank << deck[i].suit << " ";
+		}
+		cout << endl;
 	}
 
 };
@@ -82,37 +120,30 @@ private:
 
 public:
 
-	void sortHand(Card* hand, int handSize) {
+	int getHandSize() const {
+		return handSize; // Return the size of the hand
+	}
+
+	void setHandSize(int size) {
+		handSize = size; // Set the size of the hand
+	}
+	Card* getHand() const {
+		return hand; // Return the hand
+	}
+
+	void sortHand() {
 	//easy sort lmao
 	sort(hand, hand + handSize, [](const Card& a, const Card& b) {
 		return a.sort < b.sort;
 		});
 	}
 
-	Card* drawHand(Card** currentDeck, int& deckSize, int handSize) {
-
-		Card* hand = new Card[handSize]; // Initialize hand with the specified size
-
+	Hand(Deck& deck, int size) : handSize(size) {
+		hand = new Card[handSize]; // Initialize hand with the specified size
 		for (int i = 0; i < handSize; i++) {
-			int cardPick = rand() % deckSize; // Randomly pick a card from the deck
-			hand[i] = (*currentDeck)[cardPick]; // Add the picked card to the hand
-
-			Card* newDeck = new Card[deckSize - 1]; // Create a new deck without the picked card
-			for (int j = 0, k = 0; j < deckSize; j++) {
-				if (j != cardPick) { // Skip the picked card
-					newDeck[k++] = (*currentDeck)[j]; // Copy the remaining cards to the new deck
-				}
-			}
-			delete[] * currentDeck; // Clean up memory for the old deck
-			*currentDeck = newDeck; // Update the deck to the new deck without the picked card
-			deckSize--; // Decrease deck size after picking a card
+			hand[i] = deck.drawCard(); // Draw a card from the deck
 		}
-		sortHand(hand, handSize); // Sort the hand after drawing cards
-		return hand;
-	}
-
-	Hand(int size) : handSize(size) {
-		hand = drawHand(Card* deck, int& deckSize, handSize); // Initialize hand with the specified size
+		sortHand(); // Initialize hand with the specified size
 	}
 
 	~Hand() {
@@ -135,14 +166,23 @@ public:
 		return score;
 	}
 
-	int getHandSize() const {
-		return handSize; // Return the size of the hand
-	}
-
 	bool isBusted() const {
 		return getScore() > 21; // Check if the hand is busted
 	}
 
 };
 
-*/
+int main() {
+	Deck deck(2); // Create a deck with 1 standard deck of cards
+	//deck.showDeck();
+	//int size = deck.getDeckSize(); // Get the size of the deck
+	//cout << "Deck size: " << size << endl;
+	//Card* currentDeck = deck.getDeck(); // Get the current deck of cards
+	//for (int i = 0; i < size; i++) {
+	//		cout << currentDeck[i].rank << currentDeck[i].suit << " ";
+	//	}
+	//	cout << endl;
+	Hand playerHand(deck, 8); // Draw a hand of 2 cards
+	//playerHand.show(); // Show the player's hand
+	playerHand.show(); // Sort the player's hand
+}
