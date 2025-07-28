@@ -213,6 +213,14 @@ public:
 		return score;
 	}
 
+	void showScore() const {
+		int score = 0;
+		for (int i = 0; i < handSize; i++) {
+			score += hand[i].points; // Sum the points of each card in the hand
+		}
+		cout << "Player score is: " << score << endl;
+	}
+
 	bool isBusted() const {
 		return getScore() > 21; // Check if the hand is busted
 	}
@@ -230,12 +238,9 @@ private:
 
 public:
 
-	BlackJack(int numDecks = 1, int handSize = 2) :		deck(numDecks), playerHand(deck, handSize), dealerHand(deck, handSize) {
-		// Initialize the game with a deck and player hand
-	}
-
 	void hit() {
 		playerHand.drawCard(deck); // Draw a card for the player
+		playerHand.show();
 		if (playerHand.isBusted()) {
 			cout << "Player busted with score: " << playerHand.getScore() << endl;
 		} else {
@@ -257,7 +262,23 @@ public:
 	}
 
 	void dealerTurn() {
-		// Implement the dealer's turn logic
+		cout << "Dealer's turn.\n Dealer has hand:" << endl;
+		dealerHand.show();
+		cout << " Dealer's score: " << dealerHand.getScore() << endl;
+		while (dealerHand.getScore() < 17) { // Dealer hits until score is 17 or higher
+			cout << "Dealer hits." << endl;
+			dealerHand.drawCard(deck);
+			dealerHand.show();
+			cout << "Dealer's new score: " << dealerHand.getScore() << endl;
+		}
+		if (!dealerHand.isBusted()) {
+			cout << "Dealer stands" << endl;
+		}
+		//if (dealerHand.isBusted()) {
+		//	cout << "Dealer busted" << endl;
+		//} else {
+		//	cout << "Dealer stands" << endl;
+		//}
 	}
 
 	int quit() {
@@ -265,14 +286,76 @@ public:
 		return 0; // Exit the game
 	}
 
+	void status() const {
+		cout << "Player's hand: ";
+		playerHand.show();
+		cout << "Player's score: " << playerHand.getScore() << endl;
+		cout << "Dealer's hand: ";
+		dealerHand.show();
+		cout << "Dealer's score: " << dealerHand.getScore() << endl;
+	}
+
+	void victor() const {
+		if (playerHand.isBusted()) {
+			cout << "Player busted. Dealer wins!" << endl;
+		} else if (dealerHand.isBusted()) {
+			cout << "Dealer busted. Player wins!" << endl;
+		} else if (playerHand.getScore() > dealerHand.getScore()) {
+			cout << "Player wins with score: " << playerHand.getScore() << endl;
+		} else if (dealerHand.getScore() > playerHand.getScore()) {
+			cout << "Dealer wins with score: " << dealerHand.getScore() << endl;
+		} else {
+			cout << "It's a tie!" << endl;
+		}
+	}
+
+	BlackJack(int numDecks = 1, int handSize = 2) :		deck(numDecks), playerHand(deck, handSize), dealerHand(deck, handSize) {
+		// Initialize the game with a deck and player hand
+		cout << "Player's hand: ";
+		playerHand.show();
+		playerHand.showScore();
+		int choice;
+		bool play = true;
+		while (play) {
+			cout << "What do you wish to do? \n1: hit\n2: stand\n3: quit\n4: status" << endl;
+			cin >> choice;
+			switch (choice) {
+			case 1: // Assuming 1 is for "hit"
+				hit();
+				if (playerHand.isBusted()) {
+					play = false; // Exit the loop if player busts
+				}
+				break;
+			case 2: // Assuming 2 is for "stand"
+				play = false; // Exit the loop if player stands
+				stand();
+				break;
+			case 3: // Assuming 3 is for "quit"
+				play = false; // Exit the loop if player quits
+				quit();
+				break;
+			case 4: // Assuming 4 is for "status"
+				status();
+				break;
+			default:
+				cout << "Invalid choice. Please enter 1 for hit, 2 for stand, 3 for quit, or 4 for status." << endl;
+				break;
+			};
+			//if (choice == 3) break; // Exit the loop if the player chooses to quit
+			//if (choice == 2) break; // If player stands, proceed to dealer's turn
+		};
+		//if (choice == 2) {
+		//	dealerTurn(); // Proceed to dealer's turn if player stands
+		//}
+		victor(); // Determine the winner after the game ends
+		cout << "Game over." << endl;
+	};
 };
 
 int main() {
-	Deck deck(2); // Create a deck with 1 standard deck of cards
-
-	Hand playerHand(deck, 8); // Draw a hand of 2 cards
-	
-	playerHand.showSplit(); // Show the player's hand split by suit
-	cout << endl;
-	deck.showDeckSplit(); // Show the deck split by suit
+	//Deck deck(2); // Create a deck with 1 standard deck of cards
+	//Hand playerHand(deck, 8); // Draw a hand of 2 cards
+	srand(time(NULL));
+	BlackJack game;
+	//game.status(); // Show the initial status of the game
 }
